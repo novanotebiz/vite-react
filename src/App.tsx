@@ -1,17 +1,9 @@
 import React, { useState } from 'react';
 
-/**
- * NOVANOTE - ZERO-DEPENDENCY MOBILE VERSION
- * This version uses raw SVGs to prevent "Module Not Found" errors on Vercel.
- * * INSTRUCTIONS:
- * 1. Replace "YOUR_ID_HERE" on Line 15 with your Formspree ID.
- * 2. Delete EVERYTHING in GitHub's App.jsx first.
- * 3. Paste this entire block.
- */
-
 export default function App() {
-  // --- CONFIGURATION ---
-  const FORMSPREE_ID = "https://formspree.io/f/maqdywan"; 
+  // CONFIGURATION
+  // Replace YOUR_ID_HERE with your Formspree ID (e.g. "mjvnpoyz")
+  const FORMSPREE_ID = "https://formspree.io/f/maqdywan";
   const spotsLeft = 12;
 
   const [step, setStep] = useState(1);
@@ -21,108 +13,154 @@ export default function App() {
   const [phone, setPhone] = useState('');
   const [time, setTime] = useState('');
 
-  const p = { spark: 1, blast: 5, anytime: 0, window: 1, exact: 5 };
-  const total = (p[tier] || 0) + (p[timing] || 0);
+  // Pricing Logic
+  const prices = { 
+    spark: 1, 
+    blast: 5, 
+    anytime: 0, 
+    window: 1, 
+    exact: 5 
+  };
+  
+  const totalPrice = (prices[tier] || 0) + (prices[timing] || 0);
 
-  // SVG Icons (Inline to prevent dependency errors)
-  const IconZap = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>;
-  const IconTrend = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>;
-  const IconSparkle = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M3 5h4"/><path d="M19 17v4"/><path d="M17 19h4"/></svg>;
-
-  if (step === 1) return (
-    <div className="min-h-screen bg-slate-950 text-white p-6 font-sans">
-      <div className="max-w-md mx-auto pt-12">
-        <div className="flex items-center gap-2 mb-8 text-indigo-500">
-          <IconZap />
-          <span className="font-bold text-xl italic uppercase text-white">NovaNote</span>
-        </div>
-        <div className="mb-4 inline-block px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full">
-          <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">{spotsLeft} Spots Left</span>
-        </div>
-        <h1 className="text-4xl font-black mb-6 italic uppercase leading-none">The <br/><span className="text-indigo-500 text-5xl">Payload</span></h1>
-        <div className="space-y-4 mb-8">
-          <button onClick={() => setTier('spark')} className={`w-full p-6 rounded-3xl border-2 text-left transition-all ${tier === 'spark' ? 'border-indigo-500 bg-indigo-500/10' : 'border-white/10 bg-white/5'}`}>
-            <div className="flex justify-between items-center mb-2">
-              <IconTrend />
-              <span className="text-2xl font-black italic">$1</span>
-            </div>
-            <h3 className="font-bold">The Spark</h3>
-            <p className="text-xs text-slate-400">25 rapid-fire celebration texts.</p>
-          </button>
-          <button onClick={() => setTier('blast')} className={`w-full p-6 rounded-3xl border-2 text-left transition-all ${tier === 'blast' ? 'border-amber-500 bg-amber-500/10' : 'border-white/10 bg-white/5'}`}>
-            <div className="flex justify-between items-center mb-2">
-              <IconSparkle />
-              <span className="text-2xl font-black italic">$5</span>
-            </div>
-            <h3 className="font-bold">The Blast</h3>
-            <p className="text-xs text-slate-400">100+ texts + curated emoji storm.</p>
-          </button>
-        </div>
-        <button onClick={() => setStep(2)} className="w-full py-5 bg-indigo-600 rounded-2xl font-black text-lg shadow-xl shadow-indigo-600/20">SET TIMING</button>
-      </div>
-    </div>
-  );
-
-  if (step === 2) return (
-    <div className="min-h-screen bg-slate-950 text-white p-6 font-sans">
-      <div className="max-w-md mx-auto pt-12 text-center">
-        <h1 className="text-4xl font-black mb-8 italic uppercase text-left">Mission <br/><span className="text-indigo-500">Timing</span></h1>
-        <div className="space-y-3 mb-8">
-          {['anytime', 'window', 'exact'].map(t => (
-            <button key={t} onClick={() => setTiming(t)} className={`w-full p-5 rounded-2xl border-2 flex justify-between items-center transition-all ${timing === t ? 'border-indigo-500 bg-indigo-500/10' : 'border-white/10'}`}>
-              <div className="text-left">
-                <div className="font-bold capitalize">{t === 'anytime' ? 'Standard' : t === 'window' ? 'Priority Window' : 'Exact Moment'}</div>
-                <div className="text-[10px] text-slate-500 uppercase">{t === 'anytime' ? 'Within 24h' : t === 'window' ? '2-Hour Block' : 'Precise Minute'}</div>
-              </div>
-              <span className="text-indigo-400 font-black">{p[t] === 0 ? 'FREE' : '+$' + p[t]}</span>
-            </button>
-          ))}
-        </div>
-        {timing !== 'anytime' && (
-          <div className="mb-8 animate-in zoom-in-95">
-             <label className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest block mb-2 text-left">Target Time</label>
-             <input type="time" className="w-full bg-slate-900 p-4 rounded-xl border border-white/10 text-xl font-bold" onChange={e => setTime(e.target.value)} value={time} />
-          </div>
-        )}
-        <div className="flex gap-4">
-          <button onClick={() => setStep(1)} className="flex-1 py-5 bg-white/5 rounded-2xl font-bold text-slate-500 uppercase text-xs">Back</button>
-          <button onClick={() => setStep(3)} className="flex-[2] py-5 bg-indigo-600 rounded-2xl font-black">LOGISTICS</button>
-        </div>
-      </div>
-    </div>
-  );
+  // Navigation
+  const next = () => { setStep(s => s + 1); window.scrollTo(0,0); };
+  const back = () => { setStep(s => s - 1); window.scrollTo(0,0); };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white p-6 font-sans">
-      <form action={`https://formspree.io/f/${FORMSPREE_ID}`} method="POST" className="max-w-md mx-auto pt-12">
-        <h1 className="text-4xl font-black mb-8 italic uppercase">Final <br/><span className="text-indigo-500">Logistics</span></h1>
-        <input type="hidden" name="Tier" value={tier} />
-        <input type="hidden" name="Timing" value={timing} />
-        <input type="hidden" name="Time" value={time} />
-        <input type="hidden" name="Total_USD" value={total} />
+    <div style={{ backgroundColor: '#020617', color: '#f8fafc', minHeight: '100vh', fontFamily: 'sans-serif', padding: '24px' }}>
+      <div style={{ maxWidth: '400px', margin: '0 auto' }}>
         
-        <div className="space-y-5 mb-10">
-          <div className="space-y-2">
-            <label className="text-[10px] uppercase font-bold text-slate-500 tracking-widest ml-1">Your Receipt Email</label>
-            <input type="email" name="email" required className="w-full bg-white/5 p-4 rounded-2xl border border-white/10 focus:border-indigo-500 outline-none transition-all" value={email} onChange={e => setEmail(e.target.value)} />
-          </div>
-          <div className="space-y-2">
-            <label className="text-[10px] uppercase font-bold text-slate-500 tracking-widest ml-1">Target Mobile Number</label>
-            <input type="tel" name="phone" required className="w-full bg-white/5 p-4 rounded-2xl border border-white/10 focus:border-indigo-500 outline-none transition-all" placeholder="+1..." value={phone} onChange={e => setPhone(e.target.value)} />
+        {/* Header */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
+          <div style={{ fontWeight: 'bold', fontSize: '24px', fontStyle: 'italic' }}>⚡ NOVANOTE</div>
+          <div style={{ fontSize: '10px', backgroundColor: '#312e81', color: '#818cf8', padding: '4px 12px', borderRadius: '99px', border: '1px solid #3730a3' }}>
+             {spotsLeft} SPOTS LEFT
           </div>
         </div>
 
-        <div className="p-8 bg-indigo-600 rounded-[2.5rem] shadow-2xl shadow-indigo-600/30 text-center relative overflow-hidden">
-          <div className="relative z-10">
-            <div className="text-[10px] uppercase font-black tracking-widest opacity-70 mb-1">Total Mission Cost</div>
-            <div className="text-6xl font-black mb-6 italic tracking-tighter">${total}</div>
-            <button type="submit" className="w-full py-5 bg-white text-indigo-700 rounded-2xl font-black text-xl shadow-xl active:scale-95 transition-all">PAY & DEPLOY</button>
-          </div>
-          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -translate-y-12 translate-x-12"></div>
+        {/* Progress Bar */}
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '32px' }}>
+          <div style={{ height: '4px', flex: 1, backgroundColor: step >= 1 ? '#6366f1' : '#1e293b', borderRadius: '2px' }}></div>
+          <div style={{ height: '4px', flex: 1, backgroundColor: step >= 2 ? '#6366f1' : '#1e293b', borderRadius: '2px' }}></div>
+          <div style={{ height: '4px', flex: 1, backgroundColor: step >= 3 ? '#6366f1' : '#1e293b', borderRadius: '2px' }}></div>
         </div>
-        
-        <button type="button" onClick={() => setStep(2)} className="w-full mt-6 text-center text-slate-500 text-[10px] font-black uppercase tracking-widest italic">Modify Configuration</button>
-      </form>
+
+        {/* STEP 1: PAYLOAD */}
+        {step === 1 && (
+          <div>
+            <h1 style={{ fontSize: '32px', fontWeight: '900', fontStyle: 'italic', marginBottom: '8px' }}>THE PAYLOAD</h1>
+            <p style={{ color: '#94a3b8', marginBottom: '24px' }}>Choose your celebration volume.</p>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px' }}>
+              <button 
+                onClick={() => setTier('spark')}
+                style={{ textAlign: 'left', padding: '24px', borderRadius: '16px', border: tier === 'spark' ? '2px solid #6366f1' : '2px solid #1e293b', backgroundColor: tier === 'spark' ? '#6366f11a' : '#0f172a', color: 'white' }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                  <span style={{ fontSize: '24px' }}>📈</span>
+                  <span style={{ fontSize: '24px', fontWeight: 'bold' }}>$1</span>
+                </div>
+                <div style={{ fontWeight: 'bold' }}>The Spark</div>
+                <div style={{ fontSize: '12px', color: '#94a3b8' }}>25 celebration texts sent rapidly.</div>
+              </button>
+
+              <button 
+                onClick={() => setTier('blast')}
+                style={{ textAlign: 'left', padding: '24px', borderRadius: '16px', border: tier === 'blast' ? '2px solid #f59e0b' : '2px solid #1e293b', backgroundColor: tier === 'blast' ? '#f59e0b1a' : '#0f172a', color: 'white' }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                  <span style={{ fontSize: '24px' }}>✨</span>
+                  <span style={{ fontSize: '24px', fontWeight: 'bold' }}>$5</span>
+                </div>
+                <div style={{ fontWeight: 'bold' }}>The Blast</div>
+                <div style={{ fontSize: '12px', color: '#94a3b8' }}>100+ texts + emoji storm.</div>
+              </button>
+            </div>
+            
+            <button onClick={next} style={{ width: '100%', padding: '20px', backgroundColor: '#4f46e5', color: 'white', border: 'none', borderRadius: '12px', fontWeight: 'bold', fontSize: '18px' }}>
+              SET TIMING
+            </button>
+          </div>
+        )}
+
+        {/* STEP 2: TIMING */}
+        {step === 2 && (
+          <div>
+            <h1 style={{ fontSize: '32px', fontWeight: '900', fontStyle: 'italic', marginBottom: '8px' }}>TIMING</h1>
+            <p style={{ color: '#94a3b8', marginBottom: '24px' }}>When should we strike?</p>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
+              <button onClick={() => setTiming('anytime')} style={{ padding: '20px', borderRadius: '12px', border: timing === 'anytime' ? '2px solid #6366f1' : '2px solid #1e293b', backgroundColor: '#0f172a', color: 'white', display: 'flex', justifyContent: 'space-between' }}>
+                <span>🕒 Standard (24h)</span>
+                <span style={{ color: '#22c55e' }}>FREE</span>
+              </button>
+              
+              <button onClick={() => setTiming('window')} style={{ padding: '20px', borderRadius: '12px', border: timing === 'window' ? '2px solid #6366f1' : '2px solid #1e293b', backgroundColor: '#0f172a', color: 'white', display: 'flex', justifyContent: 'space-between' }}>
+                <span>⭐ Priority Window</span>
+                <span>+$1</span>
+              </button>
+
+              <button onClick={() => setTiming('exact')} style={{ padding: '20px', borderRadius: '12px', border: timing === 'exact' ? '2px solid #6366f1' : '2px solid #1e293b', backgroundColor: '#0f172a', color: 'white', display: 'flex', justifyContent: 'space-between' }}>
+                <span>🎯 Exact Moment</span>
+                <span>+$5</span>
+              </button>
+            </div>
+
+            {timing !== 'anytime' && (
+              <div style={{ marginBottom: '24px' }}>
+                <label style={{ fontSize: '10px', fontWeight: 'bold', color: '#6366f1', display: 'block', marginBottom: '8px' }}>SELECT TIME</label>
+                <input 
+                  type="time" 
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  style={{ width: '100%', padding: '16px', backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px', color: 'white', fontSize: '20px' }} 
+                />
+              </div>
+            )}
+
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button onClick={back} style={{ flex: 1, padding: '16px', backgroundColor: '#1e293b', color: '#94a3b8', border: 'none', borderRadius: '12px', fontWeight: 'bold' }}>BACK</button>
+              <button onClick={next} style={{ flex: 2, padding: '16px', backgroundColor: '#4f46e5', color: 'white', border: 'none', borderRadius: '12px', fontWeight: 'bold' }}>LOGISTICS</button>
+            </div>
+          </div>
+        )}
+
+        {/* STEP 3: LOGISTICS */}
+        {step === 3 && (
+          <form action={`https://formspree.io/f/${FORMSPREE_ID}`} method="POST">
+            <h1 style={{ fontSize: '32px', fontWeight: '900', fontStyle: 'italic', marginBottom: '8px' }}>LOGISTICS</h1>
+            
+            <input type="hidden" name="Tier" value={tier} />
+            <input type="hidden" name="Timing" value={timing} />
+            <input type="hidden" name="CustomTime" value={time} />
+            <input type="hidden" name="TotalPrice" value={`$${totalPrice}`} />
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px' }}>
+              <div>
+                <label style={{ fontSize: '10px', fontWeight: 'bold', color: '#475569', display: 'block', marginBottom: '4px' }}>YOUR EMAIL</label>
+                <input type="email" name="email" required value={email} onChange={(e) => setEmail(e.target.value)} style={{ width: '100%', padding: '16px', backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '12px', color: 'white' }} />
+              </div>
+              <div>
+                <label style={{ fontSize: '10px', fontWeight: 'bold', color: '#475569', display: 'block', marginBottom: '4px' }}>TARGET PHONE</label>
+                <input type="tel" name="phone" required value={phone} onChange={(e) => setPhone(e.target.value)} style={{ width: '100%', padding: '16px', backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '12px', color: 'white' }} />
+              </div>
+            </div>
+
+            <div style={{ backgroundColor: '#4f46e5', padding: '32px', borderRadius: '24px', textAlign: 'center' }}>
+               <div style={{ fontSize: '10px', fontWeight: 'bold', opacity: 0.7, marginBottom: '4px' }}>TOTAL MISSION COST</div>
+               <div style={{ fontSize: '56px', fontWeight: '900', fontStyle: 'italic', marginBottom: '16px' }}>${totalPrice}</div>
+               <button type="submit" style={{ width: '100%', padding: '16px', backgroundColor: 'white', color: '#4f46e5', border: 'none', borderRadius: '12px', fontWeight: '900', fontSize: '18px' }}>
+                 PAY & DEPLOY
+               </button>
+            </div>
+            
+            <button type="button" onClick={back} style={{ width: '100%', textAlign: 'center', marginTop: '16px', color: '#475569', fontSize: '10px', fontWeight: 'bold', background: 'none', border: 'none' }}>EDIT CONFIGURATION</button>
+          </form>
+        )}
+      </div>
     </div>
   );
 }
+
